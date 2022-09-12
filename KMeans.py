@@ -28,7 +28,7 @@ class KMEANS:
         for element in self.centroids:
             print("Centroid:", element)
 
-        print("distancias alv")
+        print("distancias")
 
     def printVector(self):
         for element in self.vector:
