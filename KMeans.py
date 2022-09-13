@@ -11,20 +11,19 @@ from sklearn.cluster import KMeans
  
 #Defining our function 
 def kmeans(x, k, no_of_iterations):
-    idx = np.random.choice(len(x), k, replace=False)
+    idx = np.random.choice(x.shape[0], k, replace=False)
     #Randomly choosing Centroids 
     
     #x = x[1]
     #print("lol", type(idx))
-    centroids = x[idx, :] #Step 1
-    
+    centroids = x.iloc[idx, :] #Step 1
      
     #finding the distance between centroids and all the data points
     distances = cdist(x, centroids ,'euclidean') #Step 2
      
     #Centroid with the minimum Distance
     points = np.array([np.argmin(i) for i in distances]) #Step 3
-     
+    print("aqui")
     #Repeating the above steps for a defined number of iterations
     #Step 4
     for _ in range(no_of_iterations): 
@@ -41,6 +40,7 @@ def kmeans(x, k, no_of_iterations):
          
     return points 
 
-surveys_df = pd.read_csv("surveys.csv")
-print(surveys_df[1])
-kmeans(surveys_df["year"],3,1000)
+#record_id,month,day,year,plot_id,species_id,sex,hindfoot_length,weight
+surveys_df = pd.read_csv("data/surveys.csv")
+results = kmeans(surveys_df[["month","day","year"]].head(1000),3,100)
+print(results)
