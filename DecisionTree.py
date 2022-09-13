@@ -212,6 +212,8 @@ def main():
     model = DecisionTree()
     model.fit(X_train, y_train)
     preds = model.predict(X_test)
+    #print("X: ", X)
+    #print("Y: ", y)
     print(preds)
 
 main()
