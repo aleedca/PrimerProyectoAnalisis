@@ -1,16 +1,23 @@
 #Loading the required modules
 import numpy as np
-from scipy.spatial.distance import cdist 
-from sklearn.datasets import load_digits
-from sklearn.decomposition import PCA
-from sklearn.cluster import KMeans
+import pandas as pd 
 import matplotlib.pyplot as plt
+
+from sklearn.datasets import load_iris
+from scipy.spatial.distance import cdist 
+from sklearn import datasets
+from sklearn.cluster import KMeans
+
  
 #Defining our function 
-def kmeans(x,k, no_of_iterations):
+def kmeans(x, k, no_of_iterations):
     idx = np.random.choice(len(x), k, replace=False)
     #Randomly choosing Centroids 
+    
+    #x = x[1]
+    #print("lol", type(idx))
     centroids = x[idx, :] #Step 1
+    
      
     #finding the distance between centroids and all the data points
     distances = cdist(x, centroids ,'euclidean') #Step 2
@@ -33,22 +40,7 @@ def kmeans(x,k, no_of_iterations):
         points = np.array([np.argmin(i) for i in distances])
          
     return points 
- 
- 
-#Load Data
-data = load_digits().data
-pca = PCA(2)
-  
-#Transform the data
-df = pca.fit_transform(data)
- 
-#Applying our function
-label = kmeans(df,10,1000)
- 
-#Visualize the results
- 
-u_labels = np.unique(label)
-for i in u_labels:
-    plt.scatter(df[label == i , 0] , df[label == i , 1] , label = i)
-plt.legend()
-plt.show()
+
+surveys_df = pd.read_csv("surveys.csv")
+print(surveys_df[1])
+kmeans(surveys_df["year"],3,1000)
