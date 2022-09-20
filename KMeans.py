@@ -2,6 +2,7 @@
 from scipy.spatial.distance import cdist 
 from sklearn.datasets import load_iris
 from sklearn.cluster import KMeans
+from datetime import timedelta
 from sklearn import datasets
 
 import matplotlib.pyplot as plt
@@ -55,16 +56,16 @@ def kmeans(x, k, no_of_iterations):
 
 def main():
     #load data
+    n = 100 
     surveys_df = pd.read_csv("data/surveys.csv")
-    df = pd.DataFrame(np.random.randint(0,100,size=(10, 3)), columns=list('ABC'))
+    df = pd.DataFrame(np.random.randint(0,100,size=(n, 3)), columns=list('ABC'))
 
     #execution
     start = time.time()
     results = kmeans(df,3,100)
     end = time.time()
-    executionTime = end - start
 
-    print("Execution Time:", executionTime)
+    print("Execution Time:", str(timedelta(seconds = end - start)))
     print("Assignments:", assignments)
     #print(results)
 
