@@ -42,5 +42,14 @@ def kmeans(x, k, no_of_iterations):
 
 #record_id,month,day,year,plot_id,species_id,sex,hindfoot_length,weight
 surveys_df = pd.read_csv("data/surveys.csv")
+
+df = pd.DataFrame(np.random.randint(0,100,size=(500, 3)), columns=list('ABC'))
+
+results = kmeans(df,3,100)
+print(results)
+
+"""
+surveys_df = pd.read_csv("data/surveys.csv")
 results = kmeans(surveys_df[["month","day","year"]].head(1000),3,100)
 print(results)
+"""
