@@ -67,8 +67,7 @@ def kmeans(x, k, no_of_iterations):
 
 def main():
     #load data
-    n = 100 
-    surveys_df = pd.read_csv("data/surveys.csv")
+    n = 10
     df = pd.DataFrame(np.random.randint(0,100,size=(n, 3)), columns=list('ABC'))
 
     #execution
