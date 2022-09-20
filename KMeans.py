@@ -12,10 +12,8 @@ from sklearn.cluster import KMeans
 #Defining our function 
 def kmeans(x, k, no_of_iterations):
     idx = np.random.choice(x.shape[0], k, replace=False)
+
     #Randomly choosing Centroids 
-    
-    #x = x[1]
-    #print("lol", type(idx))
     centroids = x.iloc[idx, :] #Step 1
      
     #finding the distance between centroids and all the data points
