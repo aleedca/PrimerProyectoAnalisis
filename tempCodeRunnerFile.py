@@ -1,0 +1,2 @@
+    global comparations
+    global executedLines

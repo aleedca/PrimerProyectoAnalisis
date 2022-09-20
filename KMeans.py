@@ -1,56 +1,71 @@
 #Loading the required modules
-import time
-import numpy as np
-import pandas as pd 
-import matplotlib.pyplot as plt
-
 from scipy.spatial.distance import cdist 
 from sklearn.datasets import load_iris
 from sklearn.cluster import KMeans
 from sklearn import datasets
 
-executedLines = 0 
-comparations = 0
-asignations = 0 
+import matplotlib.pyplot as plt
+import pandas as pd 
+import numpy as np
+import time
+
+#Setting variables
+assignments = 0
+
 
 #Defining our function 
 def kmeans(x, k, no_of_iterations):
+    global assignments
+   
     idx = np.random.choice(x.shape[0], k, replace=False)
+    assignments += 3
 
     #Randomly choosing Centroids 
     centroids = x.iloc[idx, :] #Step 1
+    assignments += 1
      
     #finding the distance between centroids and all the data points
     distances = cdist(x, centroids ,'euclidean') #Step 2
+    assignments += 3
      
     #Centroid with the minimum Distance
     points = np.array([np.argmin(i) for i in distances]) #Step 3
+    assignments += len(distances)
 
     #Repeating the above steps for a defined number of iterations
-    #Step 4
-    for _ in range(no_of_iterations): 
+    for _ in range(no_of_iterations): #Step 4
         centroids = []
+        assignments += 2
         for idx in range(k):
             #Updating Centroids by taking mean of Cluster it belongs to
+            assignments += 4
             temp_cent = x[points==idx].mean(axis=0) 
             centroids.append(temp_cent)
  
         centroids = np.vstack(centroids) #Updated Centroids 
+        assignments += 1
          
         distances = cdist(x, centroids ,'euclidean')
+        assignments += 3
+
         points = np.array([np.argmin(i) for i in distances])
+        assignments += len(distances)
          
     return points 
 
-#load data
-surveys_df = pd.read_csv("data/surveys.csv")
-df = pd.DataFrame(np.random.randint(0,100,size=(500, 3)), columns=list('ABC'))
+def main():
+    #load data
+    surveys_df = pd.read_csv("data/surveys.csv")
+    df = pd.DataFrame(np.random.randint(0,100,size=(10, 3)), columns=list('ABC'))
 
-#execution
-start = time.time()
-results = kmeans(df,3,100)
-end = time.time()
-executionTime = end - start
+    #execution
+    start = time.time()
+    results = kmeans(df,3,100)
+    end = time.time()
+    executionTime = end - start
 
-print(executionTime)
-#print(results)
+    print("Execution Time:", executionTime)
+    print("Assignments:", assignments)
+    #print(results)
+
+main()
