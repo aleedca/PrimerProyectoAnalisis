@@ -13,11 +13,13 @@ import time
 #Setting variables
 assignments = 0
 comparisons = 0
+executedLines = 0
 
 #Defining our function 
 def kmeans(x, k, no_of_iterations):
     global assignments
     global comparisons
+    global executedLines
    
     idx = np.random.choice(x.shape[0], k, replace=False)
     assignments += 3
@@ -45,6 +47,7 @@ def kmeans(x, k, no_of_iterations):
             comparisons += 2
             temp_cent = x[points==idx].mean(axis=0) 
             centroids.append(temp_cent)
+            executedLines += 2
  
         centroids = np.vstack(centroids) #Updated Centroids 
         assignments += 1
@@ -56,8 +59,10 @@ def kmeans(x, k, no_of_iterations):
         assignments += len(distances)
         
         comparisons += 1
+        executedLines += 5
          
     comparisons += 1
+    executedLines += 6
     return points 
 
 def main():
@@ -72,6 +77,7 @@ def main():
     end = time.time()
 
     print("Execution Time:", str(timedelta(seconds = end - start)))
+    print("Executed Lines:", executedLines)
     print("Assignments:", assignments)
     print("Comparisons:", comparisons)
     #print(results)
