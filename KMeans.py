@@ -12,11 +12,12 @@ import time
 
 #Setting variables
 assignments = 0
-
+comparisons = 0
 
 #Defining our function 
 def kmeans(x, k, no_of_iterations):
     global assignments
+    global comparisons
    
     idx = np.random.choice(x.shape[0], k, replace=False)
     assignments += 3
@@ -37,9 +38,11 @@ def kmeans(x, k, no_of_iterations):
     for _ in range(no_of_iterations): #Step 4
         centroids = []
         assignments += 2
+        comparisons += 1
         for idx in range(k):
             #Updating Centroids by taking mean of Cluster it belongs to
             assignments += 4
+            comparisons += 2
             temp_cent = x[points==idx].mean(axis=0) 
             centroids.append(temp_cent)
  
@@ -51,7 +54,10 @@ def kmeans(x, k, no_of_iterations):
 
         points = np.array([np.argmin(i) for i in distances])
         assignments += len(distances)
+        
+        comparisons += 1
          
+    comparisons += 1
     return points 
 
 def main():
@@ -67,6 +73,7 @@ def main():
 
     print("Execution Time:", str(timedelta(seconds = end - start)))
     print("Assignments:", assignments)
+    print("Comparisons:", comparisons)
     #print(results)
 
 main()
