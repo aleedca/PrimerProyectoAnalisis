@@ -22,7 +22,7 @@ def kmeans(x, k, no_of_iterations):
     global executedLines
    
     idx = np.random.choice(x.shape[0], k, replace=False)
-    assignments += 3
+    assignments += 4
 
     #Randomly choosing Centroids 
     centroids = x.iloc[idx, :] #Step 1
@@ -30,11 +30,11 @@ def kmeans(x, k, no_of_iterations):
      
     #finding the distance between centroids and all the data points
     distances = cdist(x, centroids ,'euclidean') #Step 2
-    assignments += 3
+    assignments += 4
      
     #Centroid with the minimum Distance
     points = np.array([np.argmin(i) for i in distances]) #Step 3
-    assignments += len(distances)
+    assignments += len(distances) + 1
 
     #Repeating the above steps for a defined number of iterations
     for _ in range(no_of_iterations): #Step 4
@@ -43,20 +43,20 @@ def kmeans(x, k, no_of_iterations):
         comparisons += 1
         for idx in range(k):
             #Updating Centroids by taking mean of Cluster it belongs to
-            assignments += 4
-            comparisons += 2
             temp_cent = x[points==idx].mean(axis=0) 
             centroids.append(temp_cent)
+            assignments += 4
+            comparisons += 2
             executedLines += 2
  
         centroids = np.vstack(centroids) #Updated Centroids 
-        assignments += 1
+        assignments += 2
          
         distances = cdist(x, centroids ,'euclidean')
-        assignments += 3
+        assignments += 4
 
         points = np.array([np.argmin(i) for i in distances])
-        assignments += len(distances)
+        assignments += len(distances) + 1
         
         comparisons += 1
         executedLines += 5
