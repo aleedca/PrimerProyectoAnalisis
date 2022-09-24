@@ -67,7 +67,7 @@ def kmeans(x, k, no_of_iterations):
 
 def main():
     #load data
-    n = 10
+    n = 100
     df = pd.DataFrame(np.random.randint(0,100,size=(100, 3)), columns=list('ABC'))
 
     #execution
@@ -75,7 +75,7 @@ def main():
     results = kmeans(df,3,n) #n iterations
     end = time.time()
  
-    print("Execution Time:", str(timedelta(seconds = end - start)))
+    print("Execution Time", (end - start))
     print("Executed Lines:", executedLines)
     print("Comparisons:", comparisons)
     print("Assignments:", assignments)
