@@ -1,11 +1,5 @@
 #Loading the required modules
 from scipy.spatial.distance import cdist 
-from sklearn.datasets import load_iris
-from sklearn.cluster import KMeans
-from datetime import timedelta
-from sklearn import datasets
-
-import matplotlib.pyplot as plt
 import pandas as pd 
 import numpy as np
 import time
@@ -28,7 +22,7 @@ def kmeans(x, k, no_of_iterations):
     centroids = x.iloc[idx, :] #Step 1
     assignments += 1
      
-    #finding the distance between centroids and all the data points
+    #Finding the distance between centroids and all the data points
     distances = cdist(x, centroids ,'euclidean') #Step 2
     assignments += 4
      
@@ -66,13 +60,13 @@ def kmeans(x, k, no_of_iterations):
     return points 
 
 def main():
-    #load data
+    #Load data
     n = 100
     df = pd.DataFrame(np.random.randint(0,100,size=(100, 3)), columns=list('ABC'))
 
-    #execution
+    #Execution
     start = time.time()
-    results = kmeans(df,3,n) #n iterations
+    results = kmeans(df,3,n) #N iterations
     end = time.time()
  
     print("Execution Time", (end - start))
