@@ -16,4 +16,4 @@ In order to answer these questions we will perform a variety of analytical and e
 #### Abstract 
 The motivation behind this project consists of the desire to apply the knowledge we have acquired in this subject to understand, by comparing the results from different tests, the reasons why is the efficiency of an algorithm and the way it is implemented so important. The purpose of the previously mentioned tests is to analyze the behavior of the chosen algorithms depending on the entry data variability, either in quantity or type. Because of this, we pretend to analyze each algorithm in phases which help our project to know if they are treatable or non-treatable, with an entry data from a range of 10 to 100000.
 
-See more in [Documentation](KMeans.py).
+See more in [Documentation](ProjectDocumentation.pdf) of this project.
