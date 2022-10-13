@@ -1,3 +1,9 @@
+"""
+Initial Date: September 12th, 2022
+Last Modification: September 28th, 2022
+"""
+
+#importing modules
 import time
 import numpy as np
 import pandas as pd
@@ -33,7 +39,7 @@ class DecisionTree:
         self.root = None
 
     @staticmethod
-    def _entropy(s):
+    def entropy(s):
         global assignments
         global comparisons
         global executedLines
@@ -44,28 +50,28 @@ class DecisionTree:
         :return: float, entropy value
         '''
         # Convert to integers to avoid runtime errors
-        counts = np.bincount(np.array(s, dtype=np.int64))
+        counts = np.bincount(np.array(s, dtype=np.int64)) #4//////////////////////////
         assignments += 2
         # Probabilities of each class label
-        percentages = counts / len(s)
+        percentages = counts / len(s) #3//////////////////////////
         assignments += 1
 
         # Caclulate entropy
         entropy = 0
         assignments += 1
-        for pct in percentages:
+        for pct in percentages: #m//////////////////////////
             assignments += 1
             comparisons += 1
             executedLines += 1
-            if pct > 0:
-                entropy += pct * np.log2(pct)
+            if pct > 0: #1 
+                entropy += pct * np.log2(pct) #4//////////////////////////
                 assignments += 2
                 executedLines += 1
 
         executedLines += 5
-        return -entropy
+        return -entropy #1
 
-    def _information_gain(self, parent, left_child, right_child):
+    def informationGain(self, parent, left_child, right_child):
         global assignments
         global comparisons
         global executedLines
@@ -77,16 +83,17 @@ class DecisionTree:
         :param right_child: list, right child of a parent
         :return: float, information gain
         '''
-        num_left = len(left_child) / len(parent)
-        num_right = len(right_child) / len(parent)
+        numLeft = len(left_child) / len(parent) #4//////////////////////////
+        numRight = len(right_child) / len(parent) #4//////////////////////////
         assignments += 2
 
         # One-liner which implements the previously discussed formula
         assignments += 3
         executedLines += 3
-        return self._entropy(parent) - (num_left * self._entropy(left_child) + num_right * self._entropy(right_child))
+        #  1           5m+9          1           1           5m+9            1           1            5m + 9
+        return self.entropy(parent) - (numLeft * self.entropy(left_child) + numRight * self.entropy(right_child))
 
-    def _best_split(self, X, y):
+    def bestSplit(self, X, y):
         global assignments
         global comparisons
         global executedLines
@@ -97,29 +104,29 @@ class DecisionTree:
         :param y: np.array or list, target
         :return: dict
         '''
-        best_split = {}
-        best_info_gain = -1
-        n_rows, n_cols = X.shape
+        best_split = {} #1//////////////////////////
+        best_info_gain = -1 #1//////////////////////////
+        n_rows, nCols = X.shape #2//////////////////////////
         assignments += 4
 
         # For every dataset feature
-        for f_idx in range(n_cols):
+        for fIdx in range(nCols): #n_cols + 1//////////////////////////
             assignments += 2
             comparisons += 1
-            X_curr = X[:, f_idx]
+            X_curr = X[:, fIdx] #1//////////////////////////
             executedLines += 1
             # For every unique value of that feature
-            for threshold in np.unique(X_curr):
+            for threshold in np.unique(X_curr): #n//////////////////////////
                 assignments += 1
                 comparisons += 1
                 # Construct a dataset and split it to the left and right parts
                 # Left part includes records lower or equal to the threshold
                 # Right part includes records higher than the threshold
                 #print("----------------------------------------",X_curr)
-                df = np.concatenate((X, y.reshape(1, -1).T), axis=1)
+                df = np.concatenate((X, y.reshape(1, -1).T), axis=1) #6//////////////////////////
                 assignments += 6
-                df_left = np.array([row for row in df if row[f_idx] <= threshold])
-                df_right = np.array([row for row in df if row[f_idx] > threshold])
+                df_left = np.array([row for row in df if row[fIdx] <= threshold]) #3//////////////////////////
+                df_right = np.array([row for row in df if row[fIdx] > threshold]) #2//////////////////////////
 
                 assignments += 2 + (2 * (len(df)))
                 comparisons += 2 * len(df)
@@ -127,34 +134,34 @@ class DecisionTree:
                 # Do the calculation only if there's data in both subsets
                 comparisons += 2
                 executedLines += 4
-                if len(df_left) > 0 and len(df_right) > 0:
+                if len(df_left) > 0 and len(df_right) > 0: #4//////////////////////////
                     # Obtain the value of the target variable for subsets
-                    y = df[:, -1]
-                    y_left = df_left[:, -1]
-                    y_right = df_right[:, -1]
+                    y = df[:, -1] #1//////////////////////////
+                    y_left = df_left[:, -1] #1//////////////////////////
+                    y_right = df_right[:, -1] #1//////////////////////////
                     assignments += 4
                     # Caclulate the information gain and save the split parameters
                     # if the current split if better then the previous best
-                    gain = self._information_gain(y, y_left, y_right)
+                    gain = self.informationGain(y, y_left, y_right) #3//////////////////////////
                     comparisons += 1
                     executedLines += 5
-                    if gain > best_info_gain:
+                    if gain > best_info_gain: #1 //////////////////////////
                         best_split = {
-                            'feature_index': f_idx,
+                            'feature_index': fIdx,
                             'threshold': threshold,
                             'df_left': df_left,
                             'df_right': df_right,
                             'gain': gain
-                        }
-                        best_info_gain = gain
+                        } #1//////////////////////////
+                        best_info_gain = gain #1//////////////////////////
                         executedLines += 2
                         assignments += 2
         comparisons += 1 
 
         executedLines += 5   
-        return best_split
+        return best_split #1//////////////////////////
 
-    def _build(self, X, y, depth=0):
+    def build(self, X, y, depth=0):
         global assignments
         global comparisons
         global executedLines
@@ -166,32 +173,32 @@ class DecisionTree:
         :param depth: current depth of a tree, used as a stopping criteria
         :return: Node
         '''
-        n_rows, n_cols = X.shape
+        n_rows, n_cols = X.shape #2
 
         assignments += 2
         comparisons += 2
         # Check to see if a node should be leaf node
-        if n_rows >= self.min_samples_split and depth <= self.max_depth:
+        if n_rows >= self.min_samples_split and depth <= self.max_depth: #4
             # Get the best split
-            best = self._best_split(X, y)
+            best = self.bestSplit(X, y) #3//////////////////////////
             assignments += 1
             comparisons += 1
             executedLines += 2
             # If the split isn't pure
-            if best['gain'] > 0:
+            if best['gain'] > 0: #1//////////////////////////
                 # Build a tree on the left
-                left = self._build(
+                left = self.build(
                     X=best['df_left'][:, :-1],
                     y=best['df_left'][:, -1],
                     depth=depth + 1
-                )
+                ) #5//////////////////////////
                 assignments += 4
 
-                right = self._build(
+                right = self.build(
                     X=best['df_right'][:, :-1],
                     y=best['df_right'][:, -1],
                     depth=depth + 1
-                )
+                ) #5//////////////////////////
                 assignments += 9
                 executedLines += 3
                 return Node(
@@ -200,12 +207,12 @@ class DecisionTree:
                     data_left=left,
                     data_right=right,
                     gain=best['gain']
-                )
+                ) #6//////////////////////////
         # Leaf node - value is the most common target value
         assignments += 1
         executedLines += 3
         return Node(
-            value=Counter(y).most_common(1)[0][0]
+            value=Counter(y).most_common(1)[0][0] #3//////////////////////////
         )
 
     def fit(self, X, y):
@@ -220,11 +227,11 @@ class DecisionTree:
         :return: None
         '''
         # Call a recursive function to build the tree
-        self.root = self._build(X, y)
+        self.root = self.build(X, y)   #3//////////////////////////
         executedLines += 1
         assignments += 1
 
-    def _predict(self, x, tree):
+    def predictAux(self, x, tree):
         global assignments
         global comparisons
         global executedLines
@@ -237,26 +244,26 @@ class DecisionTree:
         '''
         # Leaf node
         comparisons += 1
-        if tree.value != None:
+        if tree.value != None: #1//////////////////////////
             executedLines += 1
-            return tree.value
-        feature_value = x[tree.feature]
+            return tree.value #1//////////////////////////
+        feature_value = x[tree.feature] #1//////////////////////////
         assignments += 1
 
         # Go to the left
         comparisons += 1
-        if feature_value <= tree.threshold:
+        if feature_value <= tree.threshold: #2//////////////////////////
             assignments += 2
             executedLines += 1
-            return self._predict(x=x, tree=tree.data_left)
+            return self.predictAux(x=x, tree=tree.data_left) #2 +  //////////////////////////
 
         # Go to the right
         comparisons += 1
         executedLines += 4
-        if feature_value > tree.threshold:
+        if feature_value > tree.threshold: #1//////////////////////////
             assignments += 2
             executedLines += 1
-            return self._predict(x=x, tree=tree.data_right)
+            return self.predictAux(x=x, tree=tree.data_right) #2 + //////////////////////////
 
     def predict(self, X):
         global assignments
@@ -271,10 +278,10 @@ class DecisionTree:
         # Call the _predict() function for every observation
         assignments += 2 + len(X)
         executedLines += 1
-        return [self._predict(x, self.root) for x in X]
+        return [self.predictAux(x, self.root) for x in X] #n//////////////////////////
 
 def main():
-    num = 7000
+    num = 500
 
     df = pd.DataFrame(np.random.randint(0,100,size=(num, 4)), columns=list('ABCD'))
     df['label'] = np.random.randint(1,4,size=(num,1))
@@ -285,18 +292,19 @@ def main():
     
     
     
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+    xTrain, xTest, yTest, yTest = train_test_split(X, y, test_size=0.3, random_state=42)
     start = time.time()
     model = DecisionTree()
-    model.fit(X_train, y_train)
-    preds = model.predict(X_test)
+    model.fit(xTrain, yTest)
+    preds = model.predict(xTest)
     end = time.time()
     print(preds)
     print("========================================================================================================")
     print("Execution Time",(end-start))
-    print("Executed Lines:", executedLines)
     print("Assignments:", assignments)
     print("Comparisons:", comparisons)
+    print("Executed Lines:", executedLines)
+    print("Execution Time",(end-start))
 
 
 main()
