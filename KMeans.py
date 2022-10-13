@@ -1,3 +1,8 @@
+"""
+Initial Date: September 10th, 2022
+Last Modification: September 28th, 2022
+"""
+
 #Loading the required modules
 from scipy.spatial.distance import cdist 
 import pandas as pd 
@@ -10,7 +15,7 @@ comparisons = 0
 executedLines = 0
 
 #Defining our function 
-def kmeans(x, k, no_of_iterations):
+def kMeans(x, k, iterations):
     global assignments
     global comparisons
     global executedLines
@@ -31,14 +36,14 @@ def kmeans(x, k, no_of_iterations):
     assignments += len(distances) + 1
 
     #Repeating the above steps for a defined number of iterations
-    for _ in range(no_of_iterations): #Step 4
+    for _ in range(iterations): #Step 4
         centroids = []
         assignments += 2
         comparisons += 1
         for idx in range(k):
             #Updating Centroids by taking mean of Cluster it belongs to
-            temp_cent = x[points==idx].mean(axis=0) 
-            centroids.append(temp_cent)
+            tempCent = x[points==idx].mean(axis=0) 
+            centroids.append(tempCent)
             assignments += 4
             comparisons += 2
             executedLines += 2
@@ -66,7 +71,7 @@ def main():
 
     #Execution
     start = time.time()
-    results = kmeans(df,3,n) #N iterations
+    results = kMeans(df,3,n) #N iterations
     end = time.time()
  
     print("Execution Time", (end - start))
